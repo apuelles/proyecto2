@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VitalCore — Suplementos de Elite</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Vital<span>Core</span></a>
+    <ul class="nav-links">
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <button class="cart-btn" onclick="openCart()">
+      <span class="cart-icon">◻</span>
+      Carrito
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-tag">// Performance Science — Est. 2024</div>
+    <h1 class="hero-title">
+      FUEL YOUR<br/><span>POTENTIAL</span>
+    </h1>
+    <p class="hero-sub">
+      Suplementos de precisión formulados para atletas que no aceptan límites. Ciencia aplicada al rendimiento humano.
+    </p>
+    <a href="#productos" class="hero-cta">Ver Productos</a>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <section id="productos">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">PRODUCTOS</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="products-grid" id="productsGrid">
+  
+        <div class="product-card">
+          <div class="product-num">01</div>
+          <img src="creatina.jpeg" alt="Creatina" class="product-image">
+          <h3 class="product-name">Creatina</h3>
+          <p class="product-desc">Monohidrato de creatina pura. Aumenta la fuerza, potencia y recuperación muscular.</p>
+          <div class="product-tags">
+            <span class="tag">Fuerza</span>
+            <span class="tag">Potencia</span>
+            <span class="tag">Recuperación</span>
+          </div>
+          <div class="product-price">$14.990 <span>ARS</span></div>
+          <button class="add-to-cart" onclick="addToCart(1)">
+            <span>Añadir al Carrito</span>
+          </button>
+        </div>
+      
+        <div class="product-card">
+          <div class="product-num">02</div>
+          <img src="imagenes/proteina.jpg" alt="Proteína" class="product-image">
+          <h3 class="product-name">Proteína</h3>
+          <p class="product-desc">Whey protein de alta calidad con 25g de proteína por porción. Sabor premium.</p>
+          <div class="product-tags">
+            <span class="tag">Masa muscular</span>
+            <span class="tag">Whey</span>
+            <span class="tag">25g Proteína</span>
+          </div>
+          <div class="product-price">$22.990 <span>ARS</span></div>
+          <button class="add-to-cart" onclick="addToCart(2)">
+            <span>Añadir al Carrito</span>
+          </button>
+        </div>
+      
+        <div class="product-card">
+          <div class="product-num">03</div>
+          <img src="imagenes/electrolitos.jpg" alt="Electrolitos" class="product-image">
+          <h3 class="product-name">Electrolitos</h3>
+          <p class="product-desc">Fórmula de hidratación avanzada con sodio, potasio y magnesio. Para el rendimiento máximo.</p>
+          <div class="product-tags">
+            <span class="tag">Hidratación</span>
+            <span class="tag">Resistencia</span>
+            <span class="tag">Sin azúcar</span>
+          </div>
+          <div class="product-price">$8.990 <span>ARS</span></div>
+          <button class="add-to-cart" onclick="addToCart(3)">
+            <span>Añadir al Carrito</span>
+          </button>
+        </div>
+      
+        <div class="product-card">
+          <div class="product-num">04</div>
+          <img src="imagenes/preworkout.jpg" alt="Pre Workout" class="product-image">
+          <h3 class="product-name">Pre Workout</h3>
+          <p class="product-desc">Fórmula explosiva con cafeína, beta-alanina y citrulina. Energía total desde el primer rep.</p>
+          <div class="product-tags">
+            <span class="tag">Energía</span>
+            <span class="tag">Enfoque</span>
+            <span class="tag">Bombeo</span>
+          </div>
+          <div class="product-price">$18.990 <span>ARS</span></div>
+          <button class="add-to-cart" onclick="addToCart(4)">
+            <span>Añadir al Carrito</span>
+          </button>
+        </div>
+      
+      </div>
+  </section>
+
+  <section id="nosotros">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">NOSOTROS</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature">
+        <span class="feature-num">01</span>
+        <div class="feature-title">CALIDAD CERTIFICADA</div>
+        <p class="feature-text">Todos nuestros productos pasan por rigurosos controles de calidad. Sin rellenos, sin compromisos.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">02</span>
+        <div class="feature-title">FÓRMULAS VALIDADAS</div>
+        <p class="feature-text">Cada fórmula está respaldada por investigación científica y dosificada para resultados medibles.</p>
+      </div>
+      <div class="feature">
+        <span class="feature-num">03</span>
+        <div class="feature-title">ENTREGA RÁPIDA</div>
+        <p class="feature-text">Despacho en 24–48h a todo el país. Porque tu entrenamiento no puede esperar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto">
+    <div class="newsletter-left">
+      <h2>MANTENTE<br/>INFORMADO</h2>
+      <p>Recibí novedades, lanzamientos y consejos de entrenamiento directo en tu inbox.</p>
+    </div>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" placeholder="tu@email.com" id="newsEmail" />
+      <button class="newsletter-submit" onclick="handleNewsletter()">Suscribir</button>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-logo">VitalCore</span>
+    <span class="footer-copy">© 2024 VitalCore — Todos los derechos reservados</span>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <span class="drawer-title">CARRITO</span>
+      <button class="drawer-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="drawer-items" id="drawerItems">
+      <div class="cart-empty" id="cartEmpty">
+        <span class="cart-empty-icon">◻</span>
+        <p>Tu carrito está vacío</p>
+      </div>
+    </div>
+    <div class="drawer-footer" id="drawerFooter" style="display:none">
+      <div class="drawer-total-row">
+        <span class="drawer-total-label">Total</span>
+        <span class="drawer-total-amount" id="drawerTotal">$0</span>
+      </div>
+      <button class="checkout-btn" onclick="openCheckout()">Finalizar Compra</button>
+      <button class="continue-btn" onclick="closeCart()">Seguir Comprando</button>
+    </div>
+  </div>
+
+  <div class="checkout-modal" id="checkoutModal">
+    <div class="checkout-box">
+      <button class="checkout-box-close" onclick="closeCheckout()">✕</button>
+
+      <div id="checkoutForm">
+        <div class="checkout-tag">// Finalizar compra</div>
+        <div class="checkout-title">CHECKOUT</div>
+        <p class="checkout-subtitle">Completá tus datos para finalizar el pedido.</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Nombre</label>
+            <input class="form-input" type="text" placeholder="Juan" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Apellido</label>
+            <input class="form-input" type="text" placeholder="Pérez" />
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" type="email" placeholder="juan@email.com" />
+          </div>
+        </div>
+        <div class="form-row full">
+          <div class="form-group">
+            <label class="form-label">Dirección de envío</label>
+            <input class="form-input" type="text" placeholder="Av. Corrientes 1234, CABA" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Tarjeta</label>
+            <input class="form-input" type="text" placeholder="•••• •••• •••• ••••" maxlength="19" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Vencimiento</label>
+            <input class="form-input" type="text" placeholder="MM/AA" maxlength="5" />
+          </div>
+        </div>
+
+        <div class="order-summary">
+          <div class="order-summary-title">Resumen del pedido</div>
+          <div class="order-items" id="checkoutItems"></div>
+          <div class="order-divider"></div>
+          <div class="order-total">
+            <span>Total</span>
+            <span id="checkoutTotal">$0</span>
+          </div>
+        </div>
+
+        <button class="place-order-btn" onclick="placeOrder()">Confirmar Pedido</button>
+      </div>
+
+      <div class="success-state" id="successState">
+        <div class="success-icon">✓</div>
+        <div class="success-title">¡LISTO!</div>
+        <p class="success-text">Tu pedido fue confirmado. Te llegará un email con los detalles.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
