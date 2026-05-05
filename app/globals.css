@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
 :root {
     --black: #0a0a0a;
     --dark: #111111;
@@ -10,6 +11,8 @@
     --off-white: #e8e8e8;
     --white: #f5f5f5;
     --accent: #ffffff;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-base: 'Montserrat', sans-serif;
   }
   
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,7 +22,7 @@
   body {
     background: var(--black);
     color: var(--off-white);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-base);
     font-weight: 300;
     overflow-x: hidden;
     cursor: default;
@@ -59,7 +62,7 @@
   }
   
   .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 28px;
     letter-spacing: 6px;
     color: var(--white);
@@ -94,7 +97,7 @@
     color: var(--off-white);
     cursor: pointer;
     padding: 10px 20px;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 13px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -114,7 +117,7 @@
   .cart-count {
     background: var(--white);
     color: var(--black);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     font-weight: 700;
     width: 22px;
@@ -159,7 +162,7 @@
   }
   
   .hero-tag {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 5px;
     text-transform: uppercase;
@@ -168,7 +171,7 @@
   }
   
   .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: clamp(80px, 12vw, 180px);
     line-height: 0.9;
     letter-spacing: 4px;
@@ -194,7 +197,7 @@
     background: var(--white);
     color: var(--black);
     text-decoration: none;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 12px;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -217,7 +220,7 @@
     align-items: center;
     gap: 12px;
     color: var(--mid);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 10px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -247,14 +250,14 @@
   }
   
   .section-num {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     color: var(--mid);
     letter-spacing: 3px;
   }
   
   .section-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 52px;
     letter-spacing: 6px;
     color: var(--white);
@@ -301,7 +304,7 @@
   .product-card:hover { background: var(--mid-dark); }
   
   .product-num {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     color: var(--mid);
     letter-spacing: 3px;
@@ -322,14 +325,14 @@
   }
 
   .product-image span {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 72px;
     letter-spacing: 6px;
     color: var(--mid);
   }
   
   .product-name {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 36px;
     letter-spacing: 4px;
     color: var(--white);
@@ -352,7 +355,7 @@
   }
   
   .tag {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 9px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -362,7 +365,7 @@
   }
   
   .product-price {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 40px;
     letter-spacing: 2px;
     color: var(--white);
@@ -370,7 +373,7 @@
   }
   
   .product-price span {
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-base);
     font-size: 14px;
     color: var(--light-mid);
     font-weight: 300;
@@ -382,7 +385,7 @@
     border: 1px solid var(--mid);
     color: var(--off-white);
     padding: 14px;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -432,7 +435,7 @@
   .feature:first-child { border-left: 1px solid var(--border); }
   
   .feature-num {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 48px;
     color: var(--border);
     font-weight: 700;
@@ -441,7 +444,7 @@
   }
   
   .feature-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 26px;
     letter-spacing: 4px;
     color: var(--white);
@@ -465,7 +468,7 @@
   }
   
   .newsletter-left h2 {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 64px;
     letter-spacing: 6px;
     line-height: 0.95;
@@ -493,7 +496,7 @@
     border-right: none;
     color: var(--white);
     padding: 16px 20px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-base);
     font-size: 14px;
     outline: none;
   }
@@ -506,7 +509,7 @@
     border: 1px solid var(--white);
     color: var(--black);
     padding: 16px 28px;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -527,14 +530,14 @@
   }
   
   .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 20px;
     letter-spacing: 6px;
     color: var(--mid);
   }
   
   .footer-copy {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 10px;
     letter-spacing: 2px;
     color: var(--mid);
@@ -581,7 +584,7 @@
   }
   
   .drawer-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 28px;
     letter-spacing: 5px;
     color: var(--white);
@@ -625,7 +628,7 @@
   .cart-empty-icon { font-size: 48px; filter: grayscale(1); opacity: 0.4; }
   
   .cart-empty p {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -660,7 +663,7 @@
   .cart-item-info { flex: 1; }
   
   .cart-item-name {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 18px;
     letter-spacing: 3px;
     color: var(--white);
@@ -668,7 +671,7 @@
   }
   
   .cart-item-price {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 12px;
     color: var(--light-mid);
   }
@@ -696,7 +699,7 @@
   .qty-btn:hover { background: var(--mid-dark); color: var(--white); }
   
   .qty-num {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 13px;
     width: 32px;
     text-align: center;
@@ -735,7 +738,7 @@
   }
   
   .drawer-total-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -743,7 +746,7 @@
   }
   
   .drawer-total-amount {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 36px;
     letter-spacing: 3px;
     color: var(--white);
@@ -755,7 +758,7 @@
     border: none;
     color: var(--black);
     padding: 18px;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 12px;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -776,7 +779,7 @@
     border: 1px solid var(--border);
     color: var(--light-mid);
     padding: 14px;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -841,7 +844,7 @@
   .checkout-box-close:hover { background: var(--mid-dark); color: var(--white); }
   
   .checkout-tag {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 10px;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -850,7 +853,7 @@
   }
   
   .checkout-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 48px;
     letter-spacing: 5px;
     color: var(--white);
@@ -879,7 +882,7 @@
   }
   
   .form-label {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 9px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -891,7 +894,7 @@
     border: 1px solid var(--border);
     color: var(--white);
     padding: 12px 16px;
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--font-base);
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
@@ -908,7 +911,7 @@
   }
   
   .order-summary-title {
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 9px;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -936,7 +939,7 @@
   .order-total {
     display: flex;
     justify-content: space-between;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 22px;
     letter-spacing: 3px;
     color: var(--white);
@@ -948,7 +951,7 @@
     border: none;
     color: var(--black);
     padding: 18px;
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 12px;
     letter-spacing: 4px;
     text-transform: uppercase;
@@ -974,7 +977,7 @@
   }
   
   .success-title {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: var(--font-display);
     font-size: 42px;
     letter-spacing: 5px;
     color: var(--white);
@@ -994,7 +997,7 @@
     transform: translateX(-50%) translateY(80px);
     background: var(--white);
     color: var(--black);
-    font-family: 'Courier Prime', monospace;
+    font-family: var(--font-base);
     font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;

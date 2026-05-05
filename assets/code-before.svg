@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <rect width="1400" height="900" fill="#0b0d12"/>
+  <rect x="44" y="44" width="1312" height="812" rx="18" fill="#11151d" stroke="#2a3140"/>
+  <rect x="44" y="44" width="1312" height="62" rx="18" fill="#181e29"/>
+  <circle cx="82" cy="75" r="8" fill="#ff5f57"/>
+  <circle cx="110" cy="75" r="8" fill="#ffbd2e"/>
+  <circle cx="138" cy="75" r="8" fill="#28c840"/>
+  <text x="700" y="82" text-anchor="middle" fill="#a8b3c7" font-family="Menlo, Consolas, monospace" font-size="18">app/globals.css - antes</text>
+  <text x="76" y="150" fill="#7dd3fc" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700">Fuentes anteriores</text>
+  <text x="76" y="204" fill="#d6deeb" font-family="Menlo, Consolas, monospace" font-size="20" xml:space="preserve">
+    <tspan x="76" dy="0">@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,100..1000&amp;display=swap');</tspan>
+    <tspan x="76" dy="42"></tspan>
+    <tspan x="76" dy="42">:root {</tspan>
+    <tspan x="116" dy="34">--black: #0a0a0a;</tspan>
+    <tspan x="116" dy="34">--white: #f5f5f5;</tspan>
+    <tspan x="76" dy="34">}</tspan>
+    <tspan x="76" dy="42"></tspan>
+    <tspan x="76" dy="42">body {</tspan>
+    <tspan x="116" dy="34">font-family: 'DM Sans', sans-serif;</tspan>
+    <tspan x="76" dy="34">}</tspan>
+    <tspan x="76" dy="42"></tspan>
+    <tspan x="76" dy="42">.cart-btn, .add-to-cart, .nav-links a {</tspan>
+    <tspan x="116" dy="34">font-family: 'Courier Prime', monospace;</tspan>
+    <tspan x="76" dy="34">}</tspan>
+    <tspan x="76" dy="42"></tspan>
+    <tspan x="76" dy="42">.hero-title, .section-title, .product-name, .product-price {</tspan>
+    <tspan x="116" dy="34">font-family: 'Bebas Neue', sans-serif;</tspan>
+    <tspan x="76" dy="34">}</tspan>
+  </text>
+  <rect x="76" y="744" width="1248" height="70" rx="10" fill="#1c2430" stroke="#2a3140"/>
+  <text x="104" y="786" fill="#fca5a5" font-family="Menlo, Consolas, monospace" font-size="20">Base: DM Sans + controles en Courier Prime</text>
+</svg>
