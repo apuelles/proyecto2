@@ -8,28 +8,32 @@ const productsData = [
     name: "Creatina",
     desc: "Monohidrato de creatina pura. Aumenta la fuerza, potencia y recuperación muscular.",
     tags: ["Fuerza", "Potencia", "Recuperación"],
-    price: 14990
+    price: 14990,
+    image: "https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/nrx/nrx00074/y/39.jpg"
   },
   {
     id: 2,
     name: "Proteína",
     desc: "Whey protein de alta calidad con 25g de proteína por porción. Sabor premium.",
     tags: ["Masa muscular", "Whey", "25g Proteína"],
-    price: 22990
+    price: 22990,
+    image: "https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/nrx/nrx02905/y/33.jpg"
   },
   {
     id: 3,
     name: "Electrolitos",
     desc: "Fórmula de hidratación avanzada con sodio, potasio y magnesio. Para el rendimiento máximo.",
     tags: ["Hidratación", "Resistencia", "Sin azúcar"],
-    price: 8990
+    price: 8990,
+    image: "https://acdn-us.mitiendanube.com/stores/003/703/137/products/electrolytes-x-60-caps-tn-4764f27ff01846b9cf17321997359792-640-0.webp"
   },
   {
     id: 4,
     name: "Pre Workout",
     desc: "Fórmula explosiva con cafeína, beta-alanina y citrulina. Energía total desde el primer rep.",
     tags: ["Energía", "Enfoque", "Bombeo"],
-    price: 18990
+    price: 18990,
+    image: "https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/opn/opn05280/l/37.jpg"
   }
 ];
 
@@ -112,6 +116,11 @@ export default function App() {
           Suplementos de precisión formulados para atletas que no aceptan límites. Ciencia aplicada al rendimiento humano.
         </p>
         <a href="#productos" className="hero-cta">Ver Productos</a>
+        <img
+          className="hero-athlete"
+          src="https://us.123rf.com/450wm/nicknik93759375/nicknik937593751708/nicknik93759375170800507/84757899-illustration-of-bodybuilder-silhouette-black-on-white-background.jpg"
+          alt="Silueta de fisicoculturista"
+        />
       </section>
 
       {/* PRODUCTOS */}
@@ -126,8 +135,8 @@ export default function App() {
           {productsData.map((p, index) => (
             <div className="product-card" key={p.id}>
               <div className="product-num">0{index + 1}</div>
-              <div className="product-image" aria-hidden="true">
-                <span>{p.name.slice(0, 2).toUpperCase()}</span>
+              <div className="product-image">
+                <img src={p.image} alt={p.name} />
               </div>
               <h3 className="product-name">{p.name}</h3>
               <p className="product-desc">{p.desc}</p>
@@ -152,17 +161,32 @@ export default function App() {
         </div>
         <div className="features-grid">
           <div className="feature">
-            <span className="feature-num">01</span>
+            <div className="feature-image">
+              <img
+                src="https://inycomindustria.com/blog/wp-content/uploads/2022/03/control-de-calidad.jpg"
+                alt="Control de calidad certificado"
+              />
+            </div>
             <div className="feature-title">CALIDAD CERTIFICADA</div>
             <p className="feature-text">Todos nuestros productos pasan por rigurosos controles de calidad. Sin rellenos, sin compromisos.</p>
           </div>
           <div className="feature">
-            <span className="feature-num">02</span>
+            <div className="feature-image">
+              <img
+                src="https://irp.cdn-website.com/471bcad5/dms3rep/multi/COSTADO_foto1.jpg"
+                alt="Fórmulas validadas en laboratorio"
+              />
+            </div>
             <div className="feature-title">FÓRMULAS VALIDADAS</div>
             <p className="feature-text">Cada fórmula está respaldada por investigación científica y dosificada para resultados medibles.</p>
           </div>
           <div className="feature">
-            <span className="feature-num">03</span>
+            <div className="feature-image feature-image-icon">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/870/870071.png"
+                alt="Entrega rápida"
+              />
+            </div>
             <div className="feature-title">ENTREGA RÁPIDA</div>
             <p className="feature-text">Despacho en 24–48h a todo el país. Porque tu entrenamiento no puede esperar.</p>
           </div>
