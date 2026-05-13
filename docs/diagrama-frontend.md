@@ -1,6 +1,6 @@
 # Diagrama del Frontend - VitalCore
 
-![Diagrama visual del frontend](./diagrama-frontend.png)
+![Diagrama visual del frontend](./diagrama-frontend.svg)
 
 ```mermaid
 flowchart LR

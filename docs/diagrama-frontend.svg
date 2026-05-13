@@ -1,145 +1,170 @@
-<svg width="1500" height="820" viewBox="0 0 1500 820" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1500" height="820" fill="#191919"/>
-
+<svg width="100%" viewBox="0 0 690 980" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>Flujo del sitio VitalCore — Next.js y React</title>
+  <desc>Diagrama visual del flujo del sitio VitalCore, desde usuario y navegador hasta render, estado, datos, recursos externos, estilos y deploy.</desc>
   <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.28"/>
-    </filter>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#a7a7a7"/>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </marker>
     <style>
-      .title { font-family: Arial, Helvetica, sans-serif; font-size: 28px; font-weight: 800; fill: #f5f5f5; }
-      .subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 19px; font-weight: 700; fill: #cfcfcf; opacity: .82; }
-      .small { font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: 600; fill: #e8e8e8; opacity: .84; }
-      .tiny { font-family: Arial, Helvetica, sans-serif; font-size: 13px; font-weight: 600; fill: #d8d8d8; opacity: .78; }
-      .box-title { font-family: Arial, Helvetica, sans-serif; font-size: 22px; font-weight: 800; fill: #f2f2f2; }
-      .box-sub { font-family: Arial, Helvetica, sans-serif; font-size: 16px; font-weight: 600; fill: #d8d8d8; opacity: .82; }
-      .legend { font-family: Arial, Helvetica, sans-serif; font-size: 23px; font-weight: 700; fill: #d5d1ca; }
+      .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; font-weight: 600; }
+      .small { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 12px; font-weight: 400; }
+      .tiny { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 11px; font-weight: 400; }
+      .line { fill: none; stroke: #73726c; stroke-width: 1.5; }
+      .shell { fill: #eeedfe; stroke: #534ab7; stroke-width: 0.5; }
+      .react { fill: #e1f5ee; stroke: #0f6e56; stroke-width: 0.5; }
+      .state { fill: #faeeda; stroke: #854f0b; stroke-width: 0.5; }
+      .data { fill: #eaf3de; stroke: #3b6d11; stroke-width: 0.5; }
+      .deploy { fill: #faece7; stroke: #993c1d; stroke-width: 0.5; }
     </style>
   </defs>
 
-  <text x="750" y="48" text-anchor="middle" class="title">Diagrama del Frontend - VitalCore</text>
-  <text x="750" y="78" text-anchor="middle" class="subtitle">Next.js App Router · React client component · estado local · CSS global · deploy conceptual</text>
+  <!-- Usuario -->
+  <rect x="255" y="20" width="180" height="42" rx="8" class="shell"/>
+  <text x="345" y="42" text-anchor="middle" dominant-baseline="central" class="label" fill="#444441">Usuario / Navegador</text>
+  <line x1="345" y1="62" x2="345" y2="90" marker-end="url(#arrow)" class="line"/>
 
-  <!-- Column 1 -->
-  <rect x="58" y="116" width="210" height="540" rx="18" fill="#114f86" stroke="#78b8f2" stroke-width="1.3" filter="url(#shadow)"/>
-  <text x="163" y="166" text-anchor="middle" class="title" fill="#d8ecff">Usuario</text>
-  <text x="163" y="198" text-anchor="middle" class="subtitle" fill="#b9dcff">Navegador</text>
+  <!-- Next -->
+  <rect x="40" y="92" width="610" height="250" rx="16" class="shell"/>
+  <text x="60" y="118" dominant-baseline="central" class="label" fill="#3c3489">Next.js — App Router</text>
+  <text x="60" y="138" dominant-baseline="central" class="small" fill="#534ab7">Proyecto VitalCore · ruta principal / · estilos globales</text>
 
-  <rect x="82" y="245" width="162" height="88" rx="10" fill="#155b96" stroke="#80bdf3" stroke-width="1"/>
-  <text x="163" y="282" text-anchor="middle" class="box-title">Solicita</text>
-  <text x="163" y="310" text-anchor="middle" class="box-sub">HTTP / HTTPS</text>
+  <rect x="60" y="158" width="160" height="46" rx="8" class="shell"/>
+  <text x="140" y="176" text-anchor="middle" dominant-baseline="central" class="label" fill="#3c3489">app/layout.js</text>
+  <text x="140" y="193" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#534ab7">HTML, body, metadata</text>
 
-  <rect x="82" y="368" width="162" height="88" rx="10" fill="#155b96" stroke="#80bdf3" stroke-width="1"/>
-  <text x="163" y="405" text-anchor="middle" class="box-title">Recibe</text>
-  <text x="163" y="433" text-anchor="middle" class="box-sub">HTML + CSS + JS</text>
+  <line x1="220" y1="181" x2="258" y2="181" marker-end="url(#arrow)" class="line"/>
+  <rect x="260" y="158" width="150" height="46" rx="8" class="shell"/>
+  <text x="335" y="176" text-anchor="middle" dominant-baseline="central" class="label" fill="#3c3489">app/page.js</text>
+  <text x="335" y="193" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#534ab7">Componente App</text>
 
-  <rect x="82" y="491" width="162" height="88" rx="10" fill="#155b96" stroke="#80bdf3" stroke-width="1"/>
-  <text x="163" y="528" text-anchor="middle" class="box-title">Interactua</text>
-  <text x="163" y="556" text-anchor="middle" class="box-sub">clicks y compra</text>
+  <line x1="410" y1="181" x2="448" y2="181" marker-end="url(#arrow)" class="line"/>
+  <rect x="450" y="158" width="160" height="46" rx="8" class="shell"/>
+  <text x="530" y="176" text-anchor="middle" dominant-baseline="central" class="label" fill="#3c3489">'use client'</text>
+  <text x="530" y="193" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#534ab7">Estado y eventos</text>
 
-  <!-- Column 2 -->
-  <rect x="325" y="116" width="230" height="540" rx="18" fill="#42423f" stroke="#b6b2a8" stroke-width="1.3" filter="url(#shadow)"/>
-  <text x="440" y="166" text-anchor="middle" class="title">Next.js</text>
-  <text x="440" y="198" text-anchor="middle" class="subtitle">App Router · app/</text>
+  <text x="345" y="226" text-anchor="middle" dominant-baseline="central" class="small" fill="#3d3d3a">Secciones renderizadas por App</text>
 
-  <rect x="348" y="230" width="184" height="88" rx="10" fill="#4c4c48" stroke="#bdb9af" stroke-width="1"/>
-  <text x="440" y="267" text-anchor="middle" class="box-title">layout.js</text>
-  <text x="440" y="295" text-anchor="middle" class="box-sub">HTML raiz + metadata</text>
+  <rect x="58" y="246" width="78" height="40" rx="8" class="react"/>
+  <text x="97" y="266" text-anchor="middle" dominant-baseline="central" class="label" fill="#085041">Nav</text>
 
-  <rect x="348" y="353" width="184" height="88" rx="10" fill="#4c4c48" stroke="#bdb9af" stroke-width="1"/>
-  <text x="440" y="390" text-anchor="middle" class="box-title">page.js</text>
-  <text x="440" y="418" text-anchor="middle" class="box-sub">ruta principal /</text>
+  <rect x="148" y="246" width="82" height="40" rx="8" class="react"/>
+  <text x="189" y="266" text-anchor="middle" dominant-baseline="central" class="label" fill="#085041">Hero</text>
 
-  <rect x="348" y="476" width="184" height="88" rx="10" fill="#4c4c48" stroke="#bdb9af" stroke-width="1"/>
-  <text x="440" y="513" text-anchor="middle" class="box-title">'use client'</text>
-  <text x="440" y="541" text-anchor="middle" class="box-sub">interactividad React</text>
+  <rect x="242" y="246" width="104" height="40" rx="8" class="react"/>
+  <text x="294" y="266" text-anchor="middle" dominant-baseline="central" class="label" fill="#085041">Productos</text>
 
-  <!-- Column 3 -->
-  <rect x="612" y="116" width="240" height="540" rx="18" fill="#813017" stroke="#e09267" stroke-width="1.3" filter="url(#shadow)"/>
-  <text x="732" y="166" text-anchor="middle" class="title" fill="#ffd9c5">Estructura</text>
-  <text x="732" y="198" text-anchor="middle" class="subtitle" fill="#ffc09e">Componentes conceptuales</text>
+  <rect x="358" y="246" width="96" height="40" rx="8" class="react"/>
+  <text x="406" y="266" text-anchor="middle" dominant-baseline="central" class="label" fill="#085041">Nosotros</text>
 
-  <rect x="635" y="218" width="194" height="64" rx="10" fill="#8c381c" stroke="#e6a073" stroke-width="1"/>
-  <text x="732" y="245" text-anchor="middle" class="box-title">Nav</text>
-  <text x="732" y="268" text-anchor="middle" class="box-sub">logo, links, carrito</text>
+  <rect x="466" y="246" width="112" height="40" rx="8" class="react"/>
+  <text x="522" y="266" text-anchor="middle" dominant-baseline="central" class="label" fill="#085041">Newsletter</text>
 
-  <rect x="635" y="296" width="194" height="64" rx="10" fill="#8c381c" stroke="#e6a073" stroke-width="1"/>
-  <text x="732" y="323" text-anchor="middle" class="box-title">Hero</text>
-  <text x="732" y="346" text-anchor="middle" class="box-sub">titulo, CTA, imagen</text>
+  <rect x="96" y="294" width="120" height="34" rx="8" class="react"/>
+  <text x="156" y="311" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Cart drawer</text>
 
-  <rect x="635" y="374" width="194" height="64" rx="10" fill="#8c381c" stroke="#e6a073" stroke-width="1"/>
-  <text x="732" y="401" text-anchor="middle" class="box-title">Productos</text>
-  <text x="732" y="424" text-anchor="middle" class="box-sub">productsData.map()</text>
+  <rect x="236" y="294" width="122" height="34" rx="8" class="react"/>
+  <text x="297" y="311" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Checkout modal</text>
 
-  <rect x="635" y="452" width="194" height="64" rx="10" fill="#8c381c" stroke="#e6a073" stroke-width="1"/>
-  <text x="732" y="479" text-anchor="middle" class="box-title">Nosotros</text>
-  <text x="732" y="502" text-anchor="middle" class="box-sub">tarjetas informativas</text>
+  <rect x="378" y="294" width="82" height="34" rx="8" class="react"/>
+  <text x="419" y="311" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Toast</text>
 
-  <rect x="635" y="530" width="194" height="82" rx="10" fill="#8c381c" stroke="#e6a073" stroke-width="1"/>
-  <text x="732" y="558" text-anchor="middle" class="box-title">Carrito / Checkout</text>
-  <text x="732" y="582" text-anchor="middle" class="box-sub">drawer, modal, toast</text>
+  <rect x="480" y="294" width="72" height="34" rx="8" class="react"/>
+  <text x="516" y="311" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Footer</text>
 
-  <!-- Column 4 -->
-  <rect x="907" y="116" width="240" height="540" rx="18" fill="#075d4b" stroke="#69d0b9" stroke-width="1.3" filter="url(#shadow)"/>
-  <text x="1027" y="166" text-anchor="middle" class="title" fill="#c5fff0">Estado / Logica</text>
-  <text x="1027" y="198" text-anchor="middle" class="subtitle" fill="#89e7cf">React Hooks</text>
+  <line x1="345" y1="342" x2="345" y2="370" marker-end="url(#arrow)" class="line"/>
 
-  <rect x="930" y="230" width="194" height="88" rx="10" fill="#096956" stroke="#73d8c2" stroke-width="1"/>
-  <text x="1027" y="264" text-anchor="middle" class="box-title">useState()</text>
-  <text x="1027" y="292" text-anchor="middle" class="box-sub">cart + estados UI</text>
+  <!-- Estado -->
+  <rect x="40" y="372" width="610" height="188" rx="16" class="state"/>
+  <text x="345" y="398" text-anchor="middle" dominant-baseline="central" class="label" fill="#633806">Estado y lógica React</text>
+  <text x="345" y="418" text-anchor="middle" dominant-baseline="central" class="small" fill="#854f0b">La interfaz vive en el navegador y cambia con useState, useRef y handlers</text>
 
-  <rect x="930" y="353" width="194" height="88" rx="10" fill="#096956" stroke="#73d8c2" stroke-width="1"/>
-  <text x="1027" y="387" text-anchor="middle" class="box-title">Funciones</text>
-  <text x="1027" y="415" text-anchor="middle" class="box-sub">add, update, remove</text>
+  <rect x="62" y="442" width="128" height="56" rx="10" class="state"/>
+  <text x="126" y="462" text-anchor="middle" dominant-baseline="central" class="label" fill="#633806">cart</text>
+  <text x="126" y="480" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#854f0b">items y cantidades</text>
 
-  <rect x="930" y="476" width="194" height="88" rx="10" fill="#096956" stroke="#73d8c2" stroke-width="1"/>
-  <text x="1027" y="510" text-anchor="middle" class="box-title">Calculos</text>
-  <text x="1027" y="538" text-anchor="middle" class="box-sub">items + total $</text>
+  <rect x="208" y="442" width="142" height="56" rx="10" class="state"/>
+  <text x="279" y="462" text-anchor="middle" dominant-baseline="central" class="label" fill="#633806">Estado UI</text>
+  <text x="279" y="480" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#854f0b">drawer, modal, toast</text>
 
-  <!-- Column 5 -->
-  <rect x="1202" y="116" width="240" height="540" rx="18" fill="#40368f" stroke="#a59cf0" stroke-width="1.3" filter="url(#shadow)"/>
-  <text x="1322" y="166" text-anchor="middle" class="title" fill="#ddd8ff">Datos / CSS / Deploy</text>
-  <text x="1322" y="198" text-anchor="middle" class="subtitle" fill="#c6c0ff">separacion conceptual</text>
+  <rect x="368" y="442" width="116" height="56" rx="10" class="state"/>
+  <text x="426" y="462" text-anchor="middle" dominant-baseline="central" class="label" fill="#633806">useRef</text>
+  <text x="426" y="480" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#854f0b">email newsletter</text>
 
-  <rect x="1225" y="218" width="194" height="76" rx="10" fill="#4a3d9e" stroke="#aaa1f0" stroke-width="1"/>
-  <text x="1322" y="247" text-anchor="middle" class="box-title">productsData</text>
-  <text x="1322" y="272" text-anchor="middle" class="box-sub">array local, sin API</text>
+  <rect x="502" y="442" width="112" height="56" rx="10" class="state"/>
+  <text x="558" y="462" text-anchor="middle" dominant-baseline="central" class="label" fill="#633806">Totales</text>
+  <text x="558" y="480" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#854f0b">items + precio</text>
 
-  <rect x="1225" y="310" width="194" height="76" rx="10" fill="#4a3d9e" stroke="#aaa1f0" stroke-width="1"/>
-  <text x="1322" y="339" text-anchor="middle" class="box-title">No fetch()</text>
-  <text x="1322" y="364" text-anchor="middle" class="box-sub">imagenes por URL</text>
+  <rect x="116" y="514" width="458" height="30" rx="8" class="state"/>
+  <text x="345" y="529" text-anchor="middle" dominant-baseline="central" class="small" fill="#633806">addToCart · updateQty · removeItem · showToast · handlePlaceOrder</text>
 
-  <rect x="1225" y="402" width="194" height="76" rx="10" fill="#4a3d9e" stroke="#aaa1f0" stroke-width="1"/>
-  <text x="1322" y="431" text-anchor="middle" class="box-title">globals.css</text>
-  <text x="1322" y="456" text-anchor="middle" class="box-sub">layout + responsive</text>
+  <line x1="345" y1="560" x2="345" y2="588" marker-end="url(#arrow)" class="line"/>
 
-  <rect x="1225" y="494" width="194" height="100" rx="10" fill="#4a3d9e" stroke="#aaa1f0" stroke-width="1"/>
-  <text x="1322" y="524" text-anchor="middle" class="box-title">Deploy</text>
-  <text x="1322" y="551" text-anchor="middle" class="box-sub">codigo → GitHub</text>
-  <text x="1322" y="576" text-anchor="middle" class="box-sub">pipeline → sitio</text>
+  <!-- Datos y recursos -->
+  <rect x="40" y="590" width="610" height="126" rx="16" class="data"/>
+  <text x="345" y="616" text-anchor="middle" dominant-baseline="central" class="label" fill="#27500a">Datos, imágenes y estilos</text>
 
-  <!-- Arrows -->
-  <line x1="268" y1="386" x2="318" y2="386" stroke="#a7a7a7" stroke-width="2.3" marker-end="url(#arrow)"/>
-  <line x1="555" y1="386" x2="605" y2="386" stroke="#a7a7a7" stroke-width="2.3" marker-end="url(#arrow)"/>
-  <line x1="852" y1="386" x2="900" y2="386" stroke="#a7a7a7" stroke-width="2.3" marker-end="url(#arrow)"/>
-  <line x1="1147" y1="386" x2="1195" y2="386" stroke="#a7a7a7" stroke-width="2.3" marker-end="url(#arrow)"/>
+  <rect x="62" y="640" width="172" height="48" rx="10" class="data"/>
+  <text x="148" y="658" text-anchor="middle" dominant-baseline="central" class="label" fill="#27500a">productsData</text>
+  <text x="148" y="676" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#3b6d11">array local en page.js</text>
 
-  <!-- Bottom separation strip -->
-  <rect x="58" y="700" width="1384" height="1" fill="#3a3a3a"/>
+  <rect x="258" y="640" width="174" height="48" rx="10" class="data"/>
+  <text x="345" y="658" text-anchor="middle" dominant-baseline="central" class="label" fill="#27500a">Imágenes externas</text>
+  <text x="345" y="676" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#3b6d11">hero, productos, nosotros</text>
 
-  <text x="70" y="738" class="legend">Separacion:</text>
-  <rect x="206" y="714" width="24" height="24" rx="5" fill="#813017" stroke="#e09267" stroke-width="2"/>
-  <text x="240" y="735" class="legend">HTML / JSX = estructura</text>
+  <rect x="456" y="640" width="132" height="48" rx="10" class="data"/>
+  <text x="522" y="658" text-anchor="middle" dominant-baseline="central" class="label" fill="#27500a">globals.css</text>
+  <text x="522" y="676" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#3b6d11">layout visual</text>
 
-  <rect x="536" y="714" width="24" height="24" rx="5" fill="#40368f" stroke="#a59cf0" stroke-width="2"/>
-  <text x="570" y="735" class="legend">CSS = apariencia</text>
+  <text x="345" y="702" text-anchor="middle" dominant-baseline="central" class="tiny" fill="#3b6d11">No hay fetch ni API: los datos están escritos en el código y el navegador descarga las imágenes por URL.</text>
 
-  <rect x="808" y="714" width="24" height="24" rx="5" fill="#075d4b" stroke="#69d0b9" stroke-width="2"/>
-  <text x="842" y="735" class="legend">JS / React = logica y estado</text>
+  <line x1="345" y1="716" x2="345" y2="744" marker-end="url(#arrow)" class="line"/>
 
-  <text x="70" y="782" class="small">Ruta usada: /  →  app/page.js</text>
-  <text x="390" y="782" class="small">No hay fetch(): los productos estan en productsData</text>
-  <text x="860" y="782" class="small">Deploy: codigo local → GitHub → pipeline/build → URL publica</text>
+  <!-- Flujo usuario -->
+  <rect x="40" y="746" width="610" height="96" rx="16" class="react"/>
+  <text x="345" y="772" text-anchor="middle" dominant-baseline="central" class="label" fill="#085041">Flujo de compra dentro del sitio</text>
+
+  <rect x="66" y="796" width="96" height="30" rx="8" class="react"/>
+  <text x="114" y="811" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Ver productos</text>
+  <line x1="162" y1="811" x2="196" y2="811" marker-end="url(#arrow)" class="line"/>
+
+  <rect x="198" y="796" width="96" height="30" rx="8" class="react"/>
+  <text x="246" y="811" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Añadir</text>
+  <line x1="294" y1="811" x2="328" y2="811" marker-end="url(#arrow)" class="line"/>
+
+  <rect x="330" y="796" width="94" height="30" rx="8" class="react"/>
+  <text x="377" y="811" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Carrito</text>
+  <line x1="424" y1="811" x2="458" y2="811" marker-end="url(#arrow)" class="line"/>
+
+  <rect x="460" y="796" width="90" height="30" rx="8" class="react"/>
+  <text x="505" y="811" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">Checkout</text>
+  <line x1="550" y1="811" x2="584" y2="811" marker-end="url(#arrow)" class="line"/>
+
+  <rect x="586" y="796" width="42" height="30" rx="8" class="react"/>
+  <text x="607" y="811" text-anchor="middle" dominant-baseline="central" class="small" fill="#085041">OK</text>
+
+  <line x1="345" y1="842" x2="345" y2="870" marker-end="url(#arrow)" class="line"/>
+
+  <!-- Deploy -->
+  <rect x="40" y="872" width="610" height="72" rx="16" class="deploy"/>
+  <text x="345" y="896" text-anchor="middle" dominant-baseline="central" class="label" fill="#712b13">Deploy conceptual</text>
+
+  <text x="76" y="924" class="small" fill="#712b13">Código local</text>
+  <line x1="150" y1="920" x2="192" y2="920" marker-end="url(#arrow)" class="line"/>
+  <text x="206" y="924" class="small" fill="#712b13">GitHub</text>
+  <line x1="260" y1="920" x2="302" y2="920" marker-end="url(#arrow)" class="line"/>
+  <text x="316" y="924" class="small" fill="#712b13">Build Next.js</text>
+  <line x1="412" y1="920" x2="454" y2="920" marker-end="url(#arrow)" class="line"/>
+  <text x="468" y="924" class="small" fill="#712b13">Sitio publicado</text>
+
+  <!-- Leyenda -->
+  <rect x="54" y="958" width="10" height="10" rx="2" class="shell"/>
+  <text x="70" y="967" class="tiny" fill="#3d3d3a">Next.js</text>
+  <rect x="134" y="958" width="10" height="10" rx="2" class="react"/>
+  <text x="150" y="967" class="tiny" fill="#3d3d3a">UI / React</text>
+  <rect x="230" y="958" width="10" height="10" rx="2" class="state"/>
+  <text x="246" y="967" class="tiny" fill="#3d3d3a">Estado</text>
+  <rect x="310" y="958" width="10" height="10" rx="2" class="data"/>
+  <text x="326" y="967" class="tiny" fill="#3d3d3a">Datos / CSS</text>
+  <rect x="418" y="958" width="10" height="10" rx="2" class="deploy"/>
+  <text x="434" y="967" class="tiny" fill="#3d3d3a">Deploy</text>
 </svg>

@@ -9,7 +9,7 @@ const productsData = [
     desc: "Monohidrato de creatina pura. Aumenta la fuerza, potencia y recuperación muscular.",
     tags: ["Fuerza", "Potencia", "Recuperación"],
     price: 14990,
-    image: "https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/nrx/nrx00074/y/39.jpg"
+    image: "/images/product-creatina.jpg"
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const productsData = [
     desc: "Whey protein de alta calidad con 25g de proteína por porción. Sabor premium.",
     tags: ["Masa muscular", "Whey", "25g Proteína"],
     price: 22990,
-    image: "https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/nrx/nrx02905/y/33.jpg"
+    image: "/images/product-proteina.jpg"
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ const productsData = [
     desc: "Fórmula de hidratación avanzada con sodio, potasio y magnesio. Para el rendimiento máximo.",
     tags: ["Hidratación", "Resistencia", "Sin azúcar"],
     price: 8990,
-    image: "https://acdn-us.mitiendanube.com/stores/003/703/137/products/electrolytes-x-60-caps-tn-4764f27ff01846b9cf17321997359792-640-0.webp"
+    image: "/images/product-electrolitos.webp"
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ const productsData = [
     desc: "Fórmula explosiva con cafeína, beta-alanina y citrulina. Energía total desde el primer rep.",
     tags: ["Energía", "Enfoque", "Bombeo"],
     price: 18990,
-    image: "https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/opn/opn05280/l/37.jpg"
+    image: "/images/product-preworkout.jpg"
   }
 ];
 
@@ -118,7 +118,7 @@ export default function App() {
         <a href="#productos" className="hero-cta">Ver Productos</a>
         <img
           className="hero-athlete"
-          src="https://us.123rf.com/450wm/nicknik93759375/nicknik937593751708/nicknik93759375170800507/84757899-illustration-of-bodybuilder-silhouette-black-on-white-background.jpg"
+          src="/images/hero-bodybuilder.jpg"
           alt="Silueta de fisicoculturista"
         />
       </section>
@@ -163,7 +163,7 @@ export default function App() {
           <div className="feature">
             <div className="feature-image">
               <img
-                src="https://inycomindustria.com/blog/wp-content/uploads/2022/03/control-de-calidad.jpg"
+                src="/images/feature-calidad.jpg"
                 alt="Control de calidad certificado"
               />
             </div>
@@ -173,7 +173,7 @@ export default function App() {
           <div className="feature">
             <div className="feature-image">
               <img
-                src="https://irp.cdn-website.com/471bcad5/dms3rep/multi/COSTADO_foto1.jpg"
+                src="/images/feature-formulas.jpg"
                 alt="Fórmulas validadas en laboratorio"
               />
             </div>
@@ -183,7 +183,7 @@ export default function App() {
           <div className="feature">
             <div className="feature-image feature-image-icon">
               <img
-                src="https://cdn-icons-png.flaticon.com/512/870/870071.png"
+                src="/images/feature-entrega.png"
                 alt="Entrega rápida"
               />
             </div>
