@@ -40,9 +40,9 @@ flowchart LR
         js["JavaScript / React<br/>Eventos, estados, render condicional"]
     end
 
-    subgraph recursos["Datos y recursos externos"]
+    subgraph recursos["Datos y recursos estaticos"]
         fetch["fetch/API<br/>No se usa en este proyecto"]
-        imgs["Imagenes externas<br/>URLs en etiquetas img"]
+        imgs["public/images<br/>Imagenes locales publicadas por Next/Vercel"]
     end
 
     subgraph deploy["Deploy conceptual"]
@@ -94,7 +94,9 @@ flowchart LR
     js --> stateUI
 
     fetch -. "No aplica: no hay llamadas fetch()" .-> productsData
-    imgs --> navegador
+    imgs --> hero
+    imgs --> productos
+    imgs --> nosotros
 
     codigo --> github
     github --> pipeline
@@ -104,7 +106,7 @@ flowchart LR
 
 ## Que muestra el diagrama
 
-El diagrama muestra como funciona el frontend de VitalCore desde que una persona entra al sitio hasta que interactua con el carrito, el checkout y el newsletter. Tambien muestra como se separan la estructura, los estilos y la logica, y como seria el deploy de forma conceptual.
+El diagrama muestra como funciona el frontend de VitalCore desde que una persona entra al sitio hasta que interactua con el carrito, el checkout y el newsletter. Tambien muestra como se separan la estructura, los estilos y la logica, como se usan los recursos estaticos en `public/images`, y como seria el deploy de forma conceptual.
 
 ## 1. Usuario y navegador
 
@@ -142,6 +144,27 @@ En tu codigo los componentes no estan separados en archivos como `Nav.jsx` o `Pr
 
 `Toast` es el mensaje temporal que aparece cuando se agrega un producto o cuando se intenta suscribir al newsletter.
 
+Si el proyecto estuviera separado en componentes reales, en vez de tener todo dentro de `app/page.js`, podria verse asi:
+
+```text
+app/
+  layout.js
+  page.js
+components/
+  Nav.jsx
+  Hero.jsx
+  ProductsGrid.jsx
+  ProductCard.jsx
+  FeaturesSection.jsx
+  CartDrawer.jsx
+  CheckoutModal.jsx
+  Toast.jsx
+data/
+  products.js
+```
+
+En ese caso, `app/page.js` funcionaria como una pagina contenedora: importaria esos componentes y les pasaria datos o funciones por props. Por ejemplo, `ProductsGrid` recibiria `productsData` y `addToCart`; `CartDrawer` recibiria `cart`, `updateQty` y `removeItem`; `CheckoutModal` recibiria `cartTotalPrice` y `handlePlaceOrder`.
+
 ## 4. Manejo de estado
 
 El estado es la memoria temporal de la interfaz. En tu proyecto se maneja con `useState`.
@@ -162,6 +185,18 @@ Ademas, se calculan dos valores derivados:
 
 `cartTotalPrice` suma el precio total segun precio por cantidad. Sirve para mostrar el total en el carrito y en el checkout.
 
+En el diagrama, `UI state` significa "estado de interfaz". No guarda productos, sino si ciertas partes visuales estan abiertas, cerradas o activas. En tu codigo corresponde a `isCartOpen`, `isCheckoutOpen`, `isCheckoutSuccess` y `toastMsg`.
+
+`useRef` es una herramienta de React para guardar una referencia a un elemento del DOM sin convertirlo en estado. En tu caso se usa en `newsletterInputRef`, conectado al input del newsletter. Cuando el usuario toca "Suscribir", el codigo lee `newsletterInputRef.current?.value` para saber que email escribio, muestra un mensaje y despues limpia el input.
+
+`totales` no es un estado nuevo. Representa calculos derivados del carrito:
+
+`cartTotalItems` calcula cuantos productos hay en total.
+
+`cartTotalPrice` calcula el precio total del carrito.
+
+Se llaman derivados porque no se guardan con `useState`; se recalculan a partir de `cart`.
+
 ## 5. Logica de interaccion
 
 La logica esta en funciones dentro de `page.js`.
@@ -176,23 +211,29 @@ La logica esta en funciones dentro de `page.js`.
 
 `handlePlaceOrder()` simula confirmar la compra. Marca el checkout como exitoso y vacia el carrito.
 
-## 6. Uso de fetch
+Todas esas funciones existen en `app/page.js`. En el diagrama aparecen agrupadas como "handlers" porque son funciones que responden a acciones del usuario, como hacer click en "Añadir al Carrito", cambiar cantidades, eliminar productos o confirmar el pedido.
+
+## 6. Uso de fetch y recursos
 
 En este proyecto no se usa `fetch()`.
 
 Eso significa que los productos no vienen de una API, base de datos o servidor externo. Estan escritos directamente en el archivo `app/page.js`, dentro de `productsData`.
 
-Lo unico externo que carga el navegador son imagenes por URL dentro de etiquetas `<img>`. Eso no es lo mismo que usar `fetch()` para pedir datos. El navegador simplemente descarga esas imagenes para poder mostrarlas.
+Las imagenes tampoco dependen ahora de servidores externos. Estan guardadas dentro de `public/images`, por ejemplo `/images/product-creatina.jpg`, `/images/hero-bodybuilder.jpg` y `/images/feature-calidad.jpg`.
+
+Eso es importante para Vercel: Next.js publica automaticamente todo lo que esta dentro de `public/`, entonces el navegador pide esas imagenes al mismo sitio publicado y no a dominios de terceros.
 
 ## 7. Separacion entre HTML, CSS y JavaScript/React
 
-La estructura esta en `app/page.js`, escrita como JSX. JSX se parece a HTML, pero permite usar JavaScript dentro. Ahi aparecen etiquetas como `nav`, `section`, `div`, `button`, `input`, `footer` e `img`.
+La estructura esta en `app/page.js`, escrita como JSX. JSX significa JavaScript XML. Es la sintaxis que usa React para escribir estructura visual parecida a HTML dentro de JavaScript. Por ejemplo, cuando ves `<section>`, `<button>` o `<img>` dentro de `page.js`, eso es JSX.
 
 Los estilos estan en `app/globals.css`. Ese archivo define colores, grillas, tamaños, posiciones, responsive, modal, drawer, tarjetas, botones, imagenes y animaciones.
 
 La logica tambien esta en `app/page.js`. Esa logica incluye estados, funciones, eventos de click, render condicional y calculos del carrito.
 
 En palabras simples: JSX arma la forma, CSS le da apariencia, y React/JavaScript le da comportamiento.
+
+UI significa User Interface, o interfaz de usuario. En este proyecto, la UI es todo lo que la persona ve y toca: la barra de navegacion, el hero, las tarjetas de producto, los botones, el carrito lateral, el checkout, el formulario de newsletter y los mensajes toast.
 
 ## 8. Deploy conceptual
 
@@ -229,6 +270,8 @@ Next.js usa `layout.js` como marco general y `page.js` como pagina principal.
 React maneja la memoria temporal con `useState`: carrito abierto, productos agregados, checkout abierto y mensajes.
 
 Los productos no vienen de una API: estan en un array local llamado `productsData`.
+
+Las imagenes del sitio se sirven desde `public/images`, por eso Vercel las publica junto con el proyecto.
 
 `globals.css` se encarga de la apariencia visual.
 
