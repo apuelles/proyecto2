@@ -3,15 +3,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { fallbackProducts } from '../lib/fallbackProducts';
 
+const CART_STORAGE_KEY = 'vitalcore-cart';
 
 export default function App() {
 
   const [products, setProducts] = useState(fallbackProducts);
   const [cart, setCart] = useState([]);
+  const [hasLoadedCart, setHasLoadedCart] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
   const [isCheckoutSuccess, setIsCheckoutSuccess] = useState(false);
+  const [checkoutForm, setCheckoutForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    verificationCode: '',
+  });
+  const [verification, setVerification] = useState(null);
+  const [checkoutError, setCheckoutError] = useState('');
+  const [isProcessingCheckout, setIsProcessingCheckout] = useState(false);
+  const [confirmedOrder, setConfirmedOrder] = useState(null);
   const newsletterInputRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +36,7 @@ export default function App() {
         }
 
         const data = await response.json();
-        setProducts(data.products);
+        setProducts(data.data?.products || data.products);
       } catch (error) {
         console.error(error);
         setProducts(fallbackProducts);
@@ -34,7 +46,37 @@ export default function App() {
     loadProducts();
   }, []);
 
-  const addToCart = (product) => {
+  useEffect(() => {
+    let parsedCart = null;
+
+    try {
+      const savedCart = window.localStorage.getItem(CART_STORAGE_KEY);
+
+      if (savedCart) {
+        parsedCart = JSON.parse(savedCart);
+      }
+    } catch (error) {
+      console.error('No se pudo recuperar el carrito:', error);
+    }
+
+    window.requestAnimationFrame(() => {
+      if (Array.isArray(parsedCart)) {
+        setCart(parsedCart);
+      }
+
+      setHasLoadedCart(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedCart) {
+      return;
+    }
+
+    window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+  }, [cart, hasLoadedCart]);
+
+  const addToCartLocally = (product) => {
     setCart((prevCart) => {
       const existing = prevCart.find(item => item.id === product.id);
       if (existing) {
@@ -44,6 +86,27 @@ export default function App() {
       }
       return [...prevCart, { ...product, qty: 1 }];
     });
+  };
+
+  const addToCart = async (product) => {
+    try {
+      const response = await fetch('/api/carrito', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ producto_id: product.id, cantidad: 1 }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'No se pudo añadir al carrito');
+      }
+
+      setCart(result.data.items);
+    } catch (error) {
+      console.error(error);
+      addToCartLocally(product);
+    }
+
     showToast(`${product.name} añadido al carrito`);
   };
 
@@ -62,14 +125,78 @@ export default function App() {
     setCart(prevCart => prevCart.filter(item => item.id !== id));
   };
 
+  const handleCheckoutField = (field, value) => {
+    setCheckoutForm((prevForm) => ({ ...prevForm, [field]: value }));
+    setCheckoutError('');
+  };
+
   const showToast = (msg) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(''), 3000);
   };
 
-  const handlePlaceOrder = () => {
-    setIsCheckoutSuccess(true);
-    setCart([]); 
+  const requestPurchaseVerification = async () => {
+    setIsProcessingCheckout(true);
+    setCheckoutError('');
+
+    try {
+      const response = await fetch('/api/checkout-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: checkoutForm.email,
+          items: cart,
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'No se pudo verificar la compra');
+      }
+
+      setVerification(result.data);
+      showToast('Código de verificación generado');
+    } catch (error) {
+      setCheckoutError(error.message);
+    } finally {
+      setIsProcessingCheckout(false);
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    setIsProcessingCheckout(true);
+    setCheckoutError('');
+
+    try {
+      const response = await fetch('/api/ordenes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer: {
+            firstName: checkoutForm.firstName,
+            lastName: checkoutForm.lastName,
+            email: checkoutForm.email,
+          },
+          verificationToken: verification?.token,
+          verificationCode: checkoutForm.verificationCode,
+          items: cart,
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'No se pudo confirmar el pedido');
+      }
+
+      setConfirmedOrder(result.data.order);
+      setIsCheckoutSuccess(true);
+      setCart([]);
+      setVerification(null);
+    } catch (error) {
+      setCheckoutError(error.message);
+    } finally {
+      setIsProcessingCheckout(false);
+    }
   };
 
   const cartTotalItems = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -83,6 +210,7 @@ export default function App() {
         <ul className="nav-links">
           <li><a href="#productos">Productos</a></li>
           <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="/ordenes">Órdenes</a></li>
           <li><a href="#contacto">Contacto</a></li>
         </ul>
         <button className="cart-btn" onClick={() => setIsCartOpen(true)}>
@@ -254,6 +382,9 @@ export default function App() {
               setIsCartOpen(false);
               setIsCheckoutOpen(true);
               setIsCheckoutSuccess(false);
+              setCheckoutError('');
+              setVerification(null);
+              setConfirmedOrder(null);
             }}>
               Finalizar Compra
             </button>
@@ -273,8 +404,58 @@ export default function App() {
               <div className="checkout-title">CHECKOUT</div>
               
               <div className="form-row">
-                <div className="form-group"><label className="form-label">Nombre</label><input className="form-input" /></div>
-                <div className="form-group"><label className="form-label">Apellido</label><input className="form-input" /></div>
+                <div className="form-group">
+                  <label className="form-label">Nombre</label>
+                  <input
+                    className="form-input"
+                    value={checkoutForm.firstName}
+                    onChange={(event) => handleCheckoutField('firstName', event.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Apellido</label>
+                  <input
+                    className="form-input"
+                    value={checkoutForm.lastName}
+                    onChange={(event) => handleCheckoutField('lastName', event.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="form-row full">
+                <div className="form-group">
+                  <label className="form-label">Email para verificar</label>
+                  <input
+                    className="form-input"
+                    type="email"
+                    value={checkoutForm.email}
+                    onChange={(event) => handleCheckoutField('email', event.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="verification-panel">
+                <button
+                  className="continue-btn"
+                  onClick={requestPurchaseVerification}
+                  disabled={isProcessingCheckout}
+                >
+                  {verification ? 'Reenviar Código' : 'Enviar Código'}
+                </button>
+                {verification && (
+                  <div className="verification-code-demo">
+                    Código demo: <strong>{verification.demoCode}</strong>
+                  </div>
+                )}
+                <div className="form-group">
+                  <label className="form-label">Código de verificación</label>
+                  <input
+                    className="form-input"
+                    inputMode="numeric"
+                    value={checkoutForm.verificationCode}
+                    onChange={(event) => handleCheckoutField('verificationCode', event.target.value)}
+                  />
+                </div>
               </div>
               
               <div className="order-summary">
@@ -294,13 +475,25 @@ export default function App() {
                 </div>
               </div>
 
-              <button className="place-order-btn" onClick={handlePlaceOrder}>Confirmar Pedido</button>
+              {checkoutError && <div className="checkout-error">{checkoutError}</div>}
+
+              <button
+                className="place-order-btn"
+                onClick={handlePlaceOrder}
+                disabled={isProcessingCheckout || !verification}
+              >
+                {isProcessingCheckout ? 'Procesando...' : 'Confirmar Pedido'}
+              </button>
             </div>
           ) : (
             <div className="success-state" style={{display: 'flex'}}>
               <div className="success-icon">✓</div>
               <div className="success-title">¡LISTO!</div>
-              <p className="success-text">Tu pedido fue confirmado. Te llegará un email con los detalles.</p>
+              <p className="success-text">
+                Pedido {confirmedOrder?.id} confirmado por ${confirmedOrder?.total?.toLocaleString('es-AR')}.
+              </p>
+              <a className="hero-cta success-link" href={`/checkout?orden=${confirmedOrder?.id}`}>Ir a pagar</a>
+              <a className="continue-btn success-secondary-link" href="/ordenes">Ver órdenes</a>
             </div>
           )}
         </div>
