@@ -2,7 +2,12 @@ import './globals.css';
 
 export const metadata = {
   title: 'VitalCore',
-  description: 'Suplementos de precision para rendimiento deportivo.',
+  description: 'Suplementos de precisión para rendimiento deportivo.',
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {

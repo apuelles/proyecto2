@@ -136,6 +136,15 @@ export default function App() {
   };
 
   const requestPurchaseVerification = async () => {
+    const { firstName, lastName, email } = checkoutForm;
+    if (!firstName.trim() || !lastName.trim()) {
+      setCheckoutError('Completá tu nombre y apellido antes de continuar.');
+      return;
+    }
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setCheckoutError('Ingresá un email válido.');
+      return;
+    }
     setIsProcessingCheckout(true);
     setCheckoutError('');
 
@@ -205,18 +214,23 @@ export default function App() {
   return (
     <>
       {/* NAVEGACIÓN */}
-      <nav>
-        <a href="#" className="nav-logo">Vital<span>Core</span></a>
+      <nav aria-label="Navegación principal">
+        <a href="#" className="nav-logo" aria-label="VitalCore - Ir al inicio">Vital<span>Core</span></a>
         <ul className="nav-links">
           <li><a href="#productos">Productos</a></li>
           <li><a href="#nosotros">Nosotros</a></li>
           <li><a href="/ordenes">Órdenes</a></li>
           <li><a href="#contacto">Contacto</a></li>
+          <li><a href="/admin">Admin</a></li>
         </ul>
-        <button className="cart-btn" onClick={() => setIsCartOpen(true)}>
-          <span className="cart-icon">◻</span>
+        <button
+          className="cart-btn"
+          onClick={() => setIsCartOpen(true)}
+          aria-label={`Abrir carrito, ${cartTotalItems} ${cartTotalItems === 1 ? 'producto' : 'productos'}`}
+        >
+          <span className="cart-icon" aria-hidden="true">◻</span>
           Carrito
-          <span className="cart-count">{cartTotalItems}</span>
+          <span className="cart-count" aria-hidden="true">{cartTotalItems}</span>
         </button>
       </nav>
 
@@ -314,13 +328,22 @@ export default function App() {
           <p>Recibí novedades, lanzamientos y consejos de entrenamiento directo en tu inbox.</p>
         </div>
         <div className="newsletter-form">
-          <input className="newsletter-input" type="email" placeholder="tu@email.com" ref={newsletterInputRef} />
-          <button 
-            className="newsletter-submit" 
+          <label htmlFor="newsletter-email" className="visually-hidden">Tu email para suscripción</label>
+          <input
+            id="newsletter-email"
+            className="newsletter-input"
+            type="email"
+            placeholder="tu@email.com"
+            ref={newsletterInputRef}
+            aria-label="Email para suscripción al newsletter"
+          />
+          <button
+            className="newsletter-submit"
             onClick={() => {
-              const val = newsletterInputRef.current?.value;
-              showToast(val ? "¡Gracias por suscribirte!" : "Ingresá un email válido");
-              if (newsletterInputRef.current) {
+              const val = newsletterInputRef.current?.value?.trim();
+              const isValid = val && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+              showToast(isValid ? '¡Gracias por suscribirte!' : 'Ingresá un email válido');
+              if (isValid && newsletterInputRef.current) {
                 newsletterInputRef.current.value = '';
               }
             }}
@@ -342,10 +365,15 @@ export default function App() {
       ></div>
 
       {/* DRAWER DEL CARRITO */}
-      <div className={`cart-drawer ${isCartOpen ? 'open' : ''}`}>
+      <div
+        className={`cart-drawer ${isCartOpen ? 'open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Carrito de compras"
+      >
         <div className="drawer-header">
           <span className="drawer-title">CARRITO</span>
-          <button className="drawer-close" onClick={() => setIsCartOpen(false)}>✕</button>
+          <button className="drawer-close" onClick={() => setIsCartOpen(false)} aria-label="Cerrar carrito">✕</button>
         </div>
         
         <div className="drawer-items">
@@ -362,10 +390,10 @@ export default function App() {
                   <div className="cart-item-price">${item.price.toLocaleString('es-AR')}</div>
                 </div>
                 <div className="cart-item-controls">
-                  <button className="qty-btn" onClick={() => updateQty(item.id, -1)}>-</button>
-                  <div className="qty-num">{item.qty}</div>
-                  <button className="qty-btn" onClick={() => updateQty(item.id, 1)}>+</button>
-                  <button className="remove-btn" onClick={() => removeItem(item.id)}>✕</button>
+                  <button className="qty-btn" onClick={() => updateQty(item.id, -1)} aria-label={`Reducir cantidad de ${item.name}`}>-</button>
+                  <div className="qty-num" aria-label={`Cantidad: ${item.qty}`}>{item.qty}</div>
+                  <button className="qty-btn" onClick={() => updateQty(item.id, 1)} aria-label={`Aumentar cantidad de ${item.name}`}>+</button>
+                  <button className="remove-btn" onClick={() => removeItem(item.id)} aria-label={`Eliminar ${item.name} del carrito`}>✕</button>
                 </div>
               </div>
             ))
@@ -394,9 +422,14 @@ export default function App() {
       </div>
 
       {/* CHECKOUT MODAL */}
-      <div className={`checkout-modal ${isCheckoutOpen ? 'open' : ''}`}>
+      <div
+        className={`checkout-modal ${isCheckoutOpen ? 'open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Finalizar compra"
+      >
         <div className="checkout-box">
-          <button className="checkout-box-close" onClick={() => setIsCheckoutOpen(false)}>✕</button>
+          <button className="checkout-box-close" onClick={() => setIsCheckoutOpen(false)} aria-label="Cerrar checkout">✕</button>
 
           {!isCheckoutSuccess ? (
             <div>
@@ -405,17 +438,27 @@ export default function App() {
               
               <div className="form-row">
                 <div className="form-group">
-                  <label className="form-label">Nombre</label>
+                  <label className="form-label" htmlFor="checkout-firstname">Nombre <span aria-hidden="true">*</span></label>
                   <input
+                    id="checkout-firstname"
                     className="form-input"
+                    type="text"
+                    required
+                    minLength={2}
+                    autoComplete="given-name"
                     value={checkoutForm.firstName}
                     onChange={(event) => handleCheckoutField('firstName', event.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Apellido</label>
+                  <label className="form-label" htmlFor="checkout-lastname">Apellido <span aria-hidden="true">*</span></label>
                   <input
+                    id="checkout-lastname"
                     className="form-input"
+                    type="text"
+                    required
+                    minLength={2}
+                    autoComplete="family-name"
                     value={checkoutForm.lastName}
                     onChange={(event) => handleCheckoutField('lastName', event.target.value)}
                   />
@@ -424,10 +467,13 @@ export default function App() {
 
               <div className="form-row full">
                 <div className="form-group">
-                  <label className="form-label">Email para verificar</label>
+                  <label className="form-label" htmlFor="checkout-email">Email para verificar <span aria-hidden="true">*</span></label>
                   <input
+                    id="checkout-email"
                     className="form-input"
                     type="email"
+                    required
+                    autoComplete="email"
                     value={checkoutForm.email}
                     onChange={(event) => handleCheckoutField('email', event.target.value)}
                   />
@@ -448,10 +494,15 @@ export default function App() {
                   </div>
                 )}
                 <div className="form-group">
-                  <label className="form-label">Código de verificación</label>
+                  <label className="form-label" htmlFor="checkout-code">Código de verificación</label>
                   <input
+                    id="checkout-code"
                     className="form-input"
+                    type="text"
                     inputMode="numeric"
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                    autoComplete="one-time-code"
                     value={checkoutForm.verificationCode}
                     onChange={(event) => handleCheckoutField('verificationCode', event.target.value)}
                   />
@@ -475,7 +526,7 @@ export default function App() {
                 </div>
               </div>
 
-              {checkoutError && <div className="checkout-error">{checkoutError}</div>}
+              {checkoutError && <div className="checkout-error" role="alert" aria-live="assertive">{checkoutError}</div>}
 
               <button
                 className="place-order-btn"
@@ -500,7 +551,7 @@ export default function App() {
       </div>
 
       {/* TOAST ALERTS */}
-      <div className={`toast ${toastMsg ? 'show' : ''}`}>
+      <div className={`toast ${toastMsg ? 'show' : ''}`} role="status" aria-live="polite" aria-atomic="true">
         {toastMsg}
       </div>
     </>
