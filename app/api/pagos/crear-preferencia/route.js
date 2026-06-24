@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import { errorResponse, getUserEmail, getUserId, successResponse } from "../../../../lib/apiUtils";
+import { client, hasMercadoPagoConfig, Preference } from "../../../../lib/mercadopago";
 import { orders, paymentPreferences } from "../../../../lib/serverStore";
 
 export async function POST(request) {
@@ -32,6 +33,8 @@ export async function POST(request) {
     return errorResponse("La orden no tiene ítems válidos", "EMPTY_ORDER", 400);
   }
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
   const preference = {
     id: `pref_${crypto.randomUUID()}`,
     orden_id: order.id,
@@ -40,16 +43,46 @@ export async function POST(request) {
       email: order.customer?.email || payerEmail,
     },
     items: order.items.map((item) => ({
+      id: String(item.id),
       title: item.name,
+      description: `Cantidad: ${item.qty}`,
       quantity: item.qty,
       unit_price: item.price,
       currency_id: "ARS",
     })),
+    back_urls: {
+      success: `${appUrl}/pago-completado`,
+      failure: `${appUrl}/pago-fallido`,
+      pending: `${appUrl}/pago-pendiente`,
+    },
+    auto_return: "approved",
+    notification_url: `${appUrl}/api/webhooks/mercado-pago`,
     total: order.total,
-    notification_url: "/api/pagos/webhook",
     init_point: null,
+    sandbox: true,
     status: "prepared",
   };
+
+  if (hasMercadoPagoConfig) {
+    try {
+      const mpPreference = new Preference(client);
+      const result = await mpPreference.create({
+        body: {
+          items: preference.items,
+          payer: preference.payer,
+          back_urls: preference.back_urls,
+          auto_return: "approved",
+          external_reference: preference.external_reference,
+          notification_url: preference.notification_url,
+        },
+      });
+
+      preference.init_point = result.sandbox_init_point || result.init_point;
+      preference.id = result.id || preference.id;
+    } catch (error) {
+      console.error("Error creating Mercado Pago preference:", error?.message || error);
+    }
+  }
 
   order.metodo_pago = "mercado_pago";
   order.referencia_pago = preference.id;

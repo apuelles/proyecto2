@@ -62,12 +62,18 @@ export default function CheckoutPage() {
         throw new Error(result.error || 'No se pudo preparar el pago');
       }
 
-      setPreference(result.data.preference);
+      const pref = result.data.preference;
+      setPreference(pref);
       setOrder((prevOrder) => ({
         ...prevOrder,
         metodo_pago: 'mercado_pago',
-        referencia_pago: result.data.preference.id,
+        referencia_pago: pref.id,
       }));
+
+      if (pref.init_point) {
+        window.location.href = pref.init_point;
+        return;
+      }
     } catch (error) {
       setStatus(error.message);
     } finally {
@@ -142,11 +148,11 @@ export default function CheckoutPage() {
                 SSL activo, orden validada en servidor y referencia externa lista para webhook.
               </div>
 
-              {preference && (
+              {preference && !preference.init_point && (
                 <div className="preference-box">
-                  <div className="order-summary-title">Preferencia creada</div>
+                  <div className="order-summary-title">Preferencia generada (modo demo)</div>
                   <div className="preference-id">{preference.id}</div>
-                  <div className="payment-text">Semana 13: este paso redirige al link real de Mercado Pago.</div>
+                  <div className="payment-text">Configurá <code>MERCADOPAGO_ACCESS_TOKEN</code> en <code>.env.local</code> para activar la redirección real.</div>
                 </div>
               )}
 
@@ -155,7 +161,7 @@ export default function CheckoutPage() {
                 onClick={createPaymentPreference}
                 disabled={!canPay || isProcessing}
               >
-                {isProcessing ? 'Preparando...' : 'Preparar Pago'}
+                {isProcessing ? 'Redirigiendo...' : 'Pagar con Mercado Pago'}
               </button>
             </aside>
           </>
