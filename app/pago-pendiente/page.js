@@ -1,19 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function PagoPendientePage() {
-  const [params, setParams] = useState({});
+function PagoPendienteContent() {
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search);
-    setParams({
-      paymentId: search.get('payment_id') || search.get('collection_id') || '',
-      status: search.get('status') || search.get('collection_status') || 'pending',
-      externalRef: search.get('external_reference') || '',
-    });
-  }, []);
+  const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id') || '';
+  const externalRef = searchParams.get('external_reference') || '';
 
   return (
     <main className="orders-page">
@@ -28,7 +23,7 @@ export default function PagoPendientePage() {
       </section>
 
       <section className="orders-list" style={{ maxWidth: 600, margin: '0 auto', padding: '2rem 1rem', textAlign: 'center' }}>
-        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⏳</div>
+        <div style={{ fontSize: '4rem', marginBottom: '1rem' }} aria-hidden="true">⏳</div>
         <p style={{ fontSize: '1.2rem', marginBottom: '1rem', color: '#ccc' }}>
           Tu pago está siendo procesado.
         </p>
@@ -36,20 +31,20 @@ export default function PagoPendientePage() {
           Las transferencias bancarias pueden demorar entre 1 y 2 días hábiles en confirmarse. Te notificaremos cuando el pago sea acreditado.
         </p>
 
-        {(params.paymentId || params.externalRef) && (
+        {(paymentId || externalRef) && (
           <div className="preference-box" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
             <div className="order-summary-title">Detalles</div>
             <div style={{ marginTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {params.paymentId && (
+              {paymentId && (
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: '#888', fontSize: '0.85rem' }}>ID de pago</span>
-                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{params.paymentId}</span>
+                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{paymentId}</span>
                 </div>
               )}
-              {params.externalRef && (
+              {externalRef && (
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: '#888', fontSize: '0.85rem' }}>Orden</span>
-                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{params.externalRef}</span>
+                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{externalRef}</span>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -70,5 +65,13 @@ export default function PagoPendientePage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function PagoPendientePage() {
+  return (
+    <Suspense fallback={<div style={{ color: '#888', padding: '2rem', textAlign: 'center' }}>Cargando...</div>}>
+      <PagoPendienteContent />
+    </Suspense>
   );
 }

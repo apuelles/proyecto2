@@ -1,19 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function PagoFallidoPage() {
-  const [params, setParams] = useState({});
+function PagoFallidoContent() {
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search);
-    setParams({
-      paymentId: search.get('payment_id') || search.get('collection_id') || '',
-      status: search.get('status') || search.get('collection_status') || 'rejected',
-      externalRef: search.get('external_reference') || '',
-    });
-  }, []);
+  const externalRef = searchParams.get('external_reference') || '';
 
   return (
     <main className="orders-page">
@@ -28,7 +22,7 @@ export default function PagoFallidoPage() {
       </section>
 
       <section className="orders-list" style={{ maxWidth: 600, margin: '0 auto', padding: '2rem 1rem', textAlign: 'center' }}>
-        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✕</div>
+        <div style={{ fontSize: '4rem', marginBottom: '1rem' }} aria-hidden="true">✕</div>
         <p style={{ fontSize: '1.2rem', marginBottom: '1rem', color: '#ccc' }}>
           No se pudo procesar tu pago.
         </p>
@@ -43,24 +37,28 @@ export default function PagoFallidoPage() {
           </ul>
         </div>
 
-        {params.externalRef && (
+        {externalRef && (
           <div className="preference-box" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
             <div className="order-summary-title">Referencia</div>
             <div style={{ marginTop: '0.75rem' }}>
               <span style={{ color: '#888', fontSize: '0.85rem' }}>Orden: </span>
-              <span className="preference-id" style={{ fontSize: '0.85rem' }}>{params.externalRef}</span>
+              <span className="preference-id" style={{ fontSize: '0.85rem' }}>{externalRef}</span>
             </div>
           </div>
         )}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {params.externalRef && (
+          {externalRef ? (
             <Link
-              href={`/checkout?orden=${params.externalRef}`}
+              href={`/checkout?orden=${externalRef}`}
               className="place-order-btn"
               style={{ textDecoration: 'none', textAlign: 'center', background: '#e74c3c' }}
             >
               Reintentar pago
+            </Link>
+          ) : (
+            <Link href="/" className="place-order-btn" style={{ textDecoration: 'none', textAlign: 'center', background: '#e74c3c' }}>
+              Volver al inicio
             </Link>
           )}
           <Link href="/ordenes" className="continue-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>
@@ -69,5 +67,13 @@ export default function PagoFallidoPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function PagoFallidoPage() {
+  return (
+    <Suspense fallback={<div style={{ color: '#888', padding: '2rem', textAlign: 'center' }}>Cargando...</div>}>
+      <PagoFallidoContent />
+    </Suspense>
   );
 }

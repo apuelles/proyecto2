@@ -29,7 +29,6 @@ export default function AdminPage() {
   };
 
   const loadOrders = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch('/api/admin/orders', { headers: ADMIN_HEADERS });
       const data = await res.json();
@@ -43,7 +42,6 @@ export default function AdminPage() {
   }, []);
 
   const loadProducts = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await fetch('/api/admin/products', { headers: ADMIN_HEADERS });
       const data = await res.json();
@@ -57,8 +55,12 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => {
-    if (activeTab === 'orders') loadOrders();
-    else loadProducts();
+    setLoading(true);
+    const timer = setTimeout(() => {
+      if (activeTab === 'orders') loadOrders();
+      else loadProducts();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [activeTab, loadOrders, loadProducts]);
 
   const updateOrderStatus = async (orderId, estado) => {

@@ -1,20 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
-export default function PagoCompletadoPage() {
-  const [params, setParams] = useState({});
+function PagoCompletadoContent() {
+  const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search);
-    setParams({
-      paymentId: search.get('payment_id') || search.get('collection_id') || '',
-      status: search.get('status') || search.get('collection_status') || 'approved',
-      externalRef: search.get('external_reference') || '',
-      paymentType: search.get('payment_type') || '',
-    });
-  }, []);
+  const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id') || '';
+  const status = searchParams.get('status') || searchParams.get('collection_status') || 'approved';
+  const externalRef = searchParams.get('external_reference') || '';
 
   return (
     <main className="orders-page">
@@ -29,33 +24,29 @@ export default function PagoCompletadoPage() {
       </section>
 
       <section className="orders-list" style={{ maxWidth: 600, margin: '0 auto', padding: '2rem 1rem', textAlign: 'center' }}>
-        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✓</div>
+        <div style={{ fontSize: '4rem', marginBottom: '1rem' }} aria-hidden="true">✓</div>
         <p style={{ fontSize: '1.2rem', marginBottom: '2rem', color: '#ccc' }}>
           Tu pago fue procesado exitosamente por Mercado Pago.
         </p>
 
-        {params.paymentId && (
+        {paymentId && (
           <div className="preference-box" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
             <div className="order-summary-title">Detalles del pago</div>
             <div style={{ marginTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              {params.paymentId && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#888', fontSize: '0.85rem' }}>ID de pago</span>
-                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{params.paymentId}</span>
-                </div>
-              )}
-              {params.externalRef && (
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#888', fontSize: '0.85rem' }}>ID de pago</span>
+                <span className="preference-id" style={{ fontSize: '0.85rem' }}>{paymentId}</span>
+              </div>
+              {externalRef && (
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: '#888', fontSize: '0.85rem' }}>Referencia de orden</span>
-                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{params.externalRef}</span>
+                  <span className="preference-id" style={{ fontSize: '0.85rem' }}>{externalRef}</span>
                 </div>
               )}
-              {params.status && (
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#888', fontSize: '0.85rem' }}>Estado</span>
-                  <span style={{ color: '#27ae60', fontSize: '0.85rem', fontWeight: 600 }}>{params.status}</span>
-                </div>
-              )}
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#888', fontSize: '0.85rem' }}>Estado</span>
+                <span style={{ color: '#27ae60', fontSize: '0.85rem', fontWeight: 600 }}>{status}</span>
+              </div>
             </div>
           </div>
         )}
@@ -70,5 +61,13 @@ export default function PagoCompletadoPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function PagoCompletadoPage() {
+  return (
+    <Suspense fallback={<div style={{ color: '#888', padding: '2rem', textAlign: 'center' }}>Cargando...</div>}>
+      <PagoCompletadoContent />
+    </Suspense>
   );
 }
