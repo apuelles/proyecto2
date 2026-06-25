@@ -70,16 +70,18 @@ export async function POST(request) {
   if (hasMercadoPagoConfig) {
     try {
       const mpPreference = new Preference(client);
-      const result = await mpPreference.create({
-        body: {
-          items: preference.items,
-          payer: preference.payer,
-          back_urls: preference.back_urls,
-          auto_return: "all",
-          external_reference: preference.external_reference,
-          notification_url: preference.notification_url,
-        },
-      });
+      const preferenceBody = {
+        items: preference.items,
+        payer: preference.payer,
+        back_urls: preference.back_urls,
+        external_reference: preference.external_reference,
+        notification_url: preference.notification_url,
+      };
+      if (appUrl.startsWith("https://")) {
+        preferenceBody.auto_return = "approved";
+      }
+
+      const result = await mpPreference.create({ body: preferenceBody });
 
       preference.init_point = result.sandbox_init_point || result.init_point;
       preference.id = result.id || preference.id;
