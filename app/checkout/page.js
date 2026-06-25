@@ -44,7 +44,7 @@ export default function CheckoutPage() {
     loadOrder();
   }, []);
 
-  const canPay = useMemo(() => order?.estado === 'pendiente' && !preference, [order, preference]);
+  const canPay = useMemo(() => (order?.estado === 'pendiente' || order?.estado === 'cancelada') && !preference, [order, preference]);
 
   const createPaymentPreference = async () => {
     setIsProcessing(true);

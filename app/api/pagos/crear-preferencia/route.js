@@ -25,8 +25,12 @@ export async function POST(request) {
     return errorResponse("La orden no pertenece al usuario autenticado", "FORBIDDEN", 403);
   }
 
-  if (order.estado !== "pendiente") {
-    return errorResponse("Solo se pueden pagar órdenes pendientes", "INVALID_ORDER_STATUS", 400);
+  if (order.estado !== "pendiente" && order.estado !== "cancelada") {
+    return errorResponse("Solo se pueden pagar órdenes pendientes o canceladas", "INVALID_ORDER_STATUS", 400);
+  }
+
+  if (order.estado === "cancelada") {
+    order.estado = "pendiente";
   }
 
   if (!Array.isArray(order.items) || order.items.length === 0) {
@@ -71,7 +75,7 @@ export async function POST(request) {
           items: preference.items,
           payer: preference.payer,
           back_urls: preference.back_urls,
-          auto_return: "approved",
+          auto_return: "all",
           external_reference: preference.external_reference,
           notification_url: preference.notification_url,
         },
