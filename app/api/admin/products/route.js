@@ -1,12 +1,12 @@
-import { errorResponse, getUserRole, successResponse } from '../../../../lib/apiUtils';
+import { errorResponse, successResponse } from '../../../../lib/apiUtils';
 import { products } from '../../../../lib/serverStore';
 
+function isAdmin(request) {
+  const secret = request.headers.get('x-admin-secret');
+  return secret && secret === process.env.ADMIN_SECRET;
+}
+
 export async function GET(request) {
-  const role = getUserRole(request);
-
-  if (role !== 'admin') {
-    return errorResponse('Acceso denegado', 'FORBIDDEN', 403);
-  }
-
+  if (!isAdmin(request)) return errorResponse('Acceso denegado', 'FORBIDDEN', 403);
   return successResponse({ products }, 200);
 }

@@ -1,12 +1,13 @@
-import { errorResponse, getUserRole, successResponse } from '../../../../../lib/apiUtils';
+import { errorResponse, successResponse } from '../../../../../lib/apiUtils';
 import { products } from '../../../../../lib/serverStore';
 
-export async function PATCH(request, { params }) {
-  const role = getUserRole(request);
+function isAdmin(request) {
+  const secret = request.headers.get('x-admin-secret');
+  return secret && secret === process.env.ADMIN_SECRET;
+}
 
-  if (role !== 'admin') {
-    return errorResponse('Acceso denegado', 'FORBIDDEN', 403);
-  }
+export async function PATCH(request, { params }) {
+  if (!isAdmin(request)) return errorResponse('Acceso denegado', 'FORBIDDEN', 403);
 
   const { id } = await params;
   let body;

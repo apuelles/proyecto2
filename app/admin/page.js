@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
-const ADMIN_HEADERS = { 'x-user-role': 'admin', 'Content-Type': 'application/json' };
 const ORDER_STATES = ['pendiente', 'procesando', 'enviado', 'entregado', 'pagada', 'cancelada'];
 
 const STATE_COLORS = {
@@ -22,6 +21,22 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [flash, setFlash] = useState({ msg: '', type: 'ok' });
   const [stockEdits, setStockEdits] = useState({});
+  const [secret, setSecret] = useState('');
+  const [authed, setAuthed] = useState(false);
+  const [secretInput, setSecretInput] = useState('');
+
+  const getHeaders = () => ({ 'x-admin-secret': secret, 'Content-Type': 'application/json' });
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const res = await fetch('/api/admin/orders', { headers: { 'x-admin-secret': secretInput, 'Content-Type': 'application/json' } });
+    if (res.ok) {
+      setSecret(secretInput);
+      setAuthed(true);
+    } else {
+      alert('Contraseña incorrecta');
+    }
+  };
 
   const showFlash = (msg, type = 'ok') => {
     setFlash({ msg, type });
@@ -30,7 +45,7 @@ export default function AdminPage() {
 
   const loadOrders = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/orders', { headers: ADMIN_HEADERS });
+      const res = await fetch('/api/admin/orders', { headers: getHeaders() });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al cargar órdenes');
       setOrders(data.data?.orders || []);
@@ -43,7 +58,7 @@ export default function AdminPage() {
 
   const loadProducts = useCallback(async () => {
     try {
-      const res = await fetch('/api/admin/products', { headers: ADMIN_HEADERS });
+      const res = await fetch('/api/admin/products', { headers: getHeaders() });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Error al cargar productos');
       setAdminProducts(data.data?.products || []);
@@ -67,7 +82,7 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
-        headers: ADMIN_HEADERS,
+        headers: getHeaders(),
         body: JSON.stringify({ estado }),
       });
       if (!res.ok) throw new Error('No se pudo actualizar');
@@ -82,7 +97,7 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/admin/products/${productId}`, {
         method: 'PATCH',
-        headers: ADMIN_HEADERS,
+        headers: getHeaders(),
         body: JSON.stringify(updates),
       });
       if (!res.ok) throw new Error('No se pudo actualizar');
@@ -92,6 +107,25 @@ export default function AdminPage() {
       showFlash(e.message, 'err');
     }
   };
+
+  if (!authed) {
+    return (
+      <main className="orders-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '280px' }}>
+          <div style={{ color: '#7b61ff', fontWeight: 700, fontSize: '1.2rem', textAlign: 'center', letterSpacing: '0.1em' }}>ADMIN — VitalCore</div>
+          <input
+            type="password"
+            placeholder="Contraseña de admin"
+            value={secretInput}
+            onChange={(e) => setSecretInput(e.target.value)}
+            className="form-input"
+            autoFocus
+          />
+          <button type="submit" className="place-order-btn" style={{ width: '100%' }}>Entrar</button>
+        </form>
+      </main>
+    );
+  }
 
   return (
     <main className="orders-page" aria-label="Panel de administración">
