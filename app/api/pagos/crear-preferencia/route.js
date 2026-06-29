@@ -72,6 +72,15 @@ export async function POST(request) {
       const mpPreference = new Preference(client);
       const preferenceBody = {
         items: preference.items,
+        payer: {
+          name: order.customer?.firstName || "Comprador",
+          surname: order.customer?.lastName || "Demo",
+          email: order.customer?.email || payerEmail,
+          identification: {
+            type: "DNI",
+            number: order.customer?.dni || "12345678",
+          },
+        },
         back_urls: preference.back_urls,
         external_reference: preference.external_reference,
         auto_return: "approved",
