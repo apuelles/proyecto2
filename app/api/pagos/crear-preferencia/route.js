@@ -37,8 +37,10 @@ export async function POST(request) {
     return errorResponse("La orden no tiene ítems válidos", "EMPTY_ORDER", 400);
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL || "";
+  const appUrl = configuredUrl.startsWith("https://")
+    ? configuredUrl
+    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
   const preference = {
     id: `pref_${crypto.randomUUID()}`,
