@@ -80,6 +80,10 @@ export async function POST(request) {
 
       const result = await mpPreference.create({ body: preferenceBody });
 
+      console.log("[MP] token prefix:", process.env.MERCADOPAGO_ACCESS_TOKEN?.slice(0, 15));
+      console.log("[MP] init_point:", result.init_point);
+      console.log("[MP] sandbox_init_point:", result.sandbox_init_point);
+
       preference.init_point = result.init_point || result.sandbox_init_point;
       preference.id = result.id || preference.id;
     } catch (error) {
