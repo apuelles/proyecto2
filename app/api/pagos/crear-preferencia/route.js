@@ -40,7 +40,11 @@ export async function POST(request) {
   const configuredUrl = process.env.NEXT_PUBLIC_APP_URL || "";
   const appUrl = configuredUrl.startsWith("https://")
     ? configuredUrl
-    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+    : process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : "http://localhost:3000";
 
   const preference = {
     id: `pref_${crypto.randomUUID()}`,
