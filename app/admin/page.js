@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const ORDER_STATES = ['pendiente', 'procesando', 'enviado', 'entregado', 'pagada', 'cancelada'];
 
@@ -25,7 +25,7 @@ export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
   const [secretInput, setSecretInput] = useState('');
 
-  const getHeaders = () => ({ 'x-admin-secret': secret, 'Content-Type': 'application/json' });
+  const [refresh, setRefresh] = useState(0);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -43,51 +43,42 @@ export default function AdminPage() {
     setTimeout(() => setFlash({ msg: '', type: 'ok' }), 2500);
   };
 
-  const loadOrders = useCallback(async () => {
-    try {
-      const res = await fetch('/api/admin/orders', { headers: getHeaders() });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al cargar órdenes');
-      setOrders(data.data?.orders || []);
-    } catch (e) {
-      showFlash(e.message, 'err');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const loadProducts = useCallback(async () => {
-    try {
-      const res = await fetch('/api/admin/products', { headers: getHeaders() });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Error al cargar productos');
-      setAdminProducts(data.data?.products || []);
-    } catch (e) {
-      showFlash(e.message, 'err');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    if (!authed || !secret) return;
     setLoading(true);
-    const timer = setTimeout(() => {
-      if (activeTab === 'orders') loadOrders();
-      else loadProducts();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [activeTab, loadOrders, loadProducts]);
+    const headers = { 'x-admin-secret': secret, 'Content-Type': 'application/json' };
+    const load = async () => {
+      try {
+        if (activeTab === 'orders') {
+          const res = await fetch('/api/admin/orders', { headers });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Error al cargar órdenes');
+          setOrders(data.data?.orders || []);
+        } else {
+          const res = await fetch('/api/admin/products', { headers });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Error al cargar productos');
+          setAdminProducts(data.data?.products || []);
+        }
+      } catch (e) {
+        showFlash(e.message, 'err');
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [authed, secret, activeTab, refresh]);
 
   const updateOrderStatus = async (orderId, estado) => {
     try {
       const res = await fetch(`/api/admin/orders/${orderId}`, {
         method: 'PATCH',
-        headers: getHeaders(),
+        headers: { 'x-admin-secret': secret, 'Content-Type': 'application/json' },
         body: JSON.stringify({ estado }),
       });
       if (!res.ok) throw new Error('No se pudo actualizar');
       showFlash(`Orden actualizada a "${estado}"`);
-      loadOrders();
+      setRefresh((r) => r + 1);
     } catch (e) {
       showFlash(e.message, 'err');
     }
@@ -97,12 +88,12 @@ export default function AdminPage() {
     try {
       const res = await fetch(`/api/admin/products/${productId}`, {
         method: 'PATCH',
-        headers: getHeaders(),
+        headers: { 'x-admin-secret': secret, 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
       });
       if (!res.ok) throw new Error('No se pudo actualizar');
       showFlash('Producto actualizado');
-      loadProducts();
+      setRefresh((r) => r + 1);
     } catch (e) {
       showFlash(e.message, 'err');
     }
